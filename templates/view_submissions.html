@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block title %}Submissions - {{ assignment.title }}{% endblock %}
+{% block content %}
+<div class="animate-fade-in">
+    <a href="{{ url_for('course_detail', course_id=assignment.course_id) }}" style="color: var(--text-muted); display: block; margin-bottom: 2rem;">← Back to Course</a>
+    
+    <div style="margin-bottom: 3rem;">
+        <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem;">Submissions for {{ assignment.title }}</h1>
+        <p style="color: var(--text-muted);">{{ submissions|length }} total submissions received.</p>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+        {% if submissions %}
+            {% for sub in submissions %}
+            <div class="glass-card" style="padding: 2rem;">
+                <div style="display:flex; justify-content:space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <div>
+                        <h3 style="margin-bottom: 0.25rem;">{{ sub.username }}</h3>
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Submitted on {{ sub.submitted_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </div>
+                    <a href="{{ url_for('static', filename='uploads/' + sub.file_path) }}" target="_blank" class="btn" style="border: 1px solid var(--border-color); font-size: 0.8rem;">Download File</a>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.03); border-radius: 0.75rem; padding: 1.5rem; border: 1px solid var(--border-color);">
+                    <h4 style="margin-bottom: 1rem; font-size: 0.9rem; text-transform: uppercase; color: var(--primary);">Leave a Review</h4>
+                    <form action="{{ url_for('review_submission', submission_id=sub.id) }}" method="POST">
+                        <div class="form-group">
+                            <label style="font-size: 0.8rem;">Grade (0-100)</label>
+                            <input type="number" name="grade" class="form-control" min="0" max="100" required>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size: 0.8rem;">Comments</label>
+                            <textarea name="comments" class="form-control" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; font-size: 0.9rem; padding: 0.6rem;">Submit Review</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="glass-card" style="grid-column: 1 / -1; text-align: center; padding: 4rem;">
+                <p style="color: var(--text-muted);">No submissions yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
