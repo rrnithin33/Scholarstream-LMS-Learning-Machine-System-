@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Create New Quiz - ScholarStream LMS{% endblock %}
+{% block content %}
+<div style="max-width: 600px; margin: 2rem auto;" class="animate-fade-in">
+    <a href="{{ url_for('course_detail', course_id=course_id) }}" style="color: var(--text-muted); display: block; margin-bottom: 1rem;">← Back to Course</a>
+    <div class="glass-card">
+        <h2 style="margin-bottom: 2rem; font-size: 2rem;">Create New Quiz</h2>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="title">Quiz Title</label>
+                <input type="text" name="title" id="title" class="form-control" placeholder="e.g. Python Basics Quiz" required>
+            </div>
+            <div class="form-group">
+                <label for="passing_score">Passing Score (%)</label>
+                <input type="number" name="passing_score" id="passing_score" class="form-control" value="70" min="0" max="100" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Create Quiz & Add Questions</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

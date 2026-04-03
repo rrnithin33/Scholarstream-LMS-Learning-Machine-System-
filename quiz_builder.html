@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block title %}Quiz Builder - {{ quiz.title }}{% endblock %}
+{% block content %}
+<div class="animate-fade-in" style="display:grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+    <!-- Add Question Form -->
+    <div>
+        <a href="{{ url_for('course_detail', course_id=quiz.course_id) }}" style="color: var(--text-muted); display: block; margin-bottom: 2rem;">← Back to Course</a>
+        <div class="glass-card">
+            <h2 style="margin-bottom: 2rem;">Add Question to {{ quiz.title }}</h2>
+            <form method="POST">
+                <div class="form-group">
+                    <label>Question Text</label>
+                    <textarea name="question_text" class="form-control" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Option 1</label>
+                    <input type="text" name="opt1" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Option 2</label>
+                    <input type="text" name="opt2" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Option 3</label>
+                    <input type="text" name="opt3" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Option 4</label>
+                    <input type="text" name="opt4" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Correct Option (1-4)</label>
+                    <select name="correct_answer" class="form-control">
+                        <option value="1">Option 1</option>
+                        <option value="2">Option 2</option>
+                        <option value="3">Option 3</option>
+                        <option value="4">Option 4</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Add Question</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Existing Questions List -->
+    <div>
+        <h2 style="margin-bottom: 2rem;">Current Questions</h2>
+        <div style="display:flex; flex-direction: column; gap: 1rem;">
+            {% if questions %}
+                {% for q in questions %}
+                <div class="glass-card" style="padding: 1.5rem;">
+                    <div style="font-weight: 800; font-size: 0.8rem; color: var(--primary); margin-bottom: 0.5rem;">QUESTION {{ loop.index }}</div>
+                    <p style="margin-bottom: 1rem; font-weight: 600;">{{ q.question_text }}</p>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <!-- Options preview could go here if needed -->
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Answer: Option {{ q.correct_answer }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="glass-card" style="text-align: center; padding: 3rem;">
+                    <p style="color: var(--text-muted);">No questions added yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
