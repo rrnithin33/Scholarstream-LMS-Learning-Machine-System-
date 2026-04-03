@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
+import pymysql
+
+pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = 'scholarstream_secret_key'
