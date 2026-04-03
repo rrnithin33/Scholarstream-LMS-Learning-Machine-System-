@@ -2,3 +2,5 @@ Flask
 flask-bcrypt
 gunicorn
 PyMySQL
+flask-mysqldb
+mysqlclient
