@@ -101,8 +101,8 @@ def login():
         user = cursor.fetchone()
         
         if user and bcrypt.check_password_hash(user[3], password_candidate):
-            session['user_id'] = user['0']
-            session['role'] = user['4']
+            session['user_id'] = user[0]
+            session['role'] = user[4]
             flash('You are now logged in', 'success')
             return redirect(url_for('dashboard'))
         else:
