@@ -100,9 +100,9 @@ def login():
         cursor.execute("SELECT * FROM users WHERE email=?", (email,))
         user = cursor.fetchone()
         
-        if user and bcrypt.check_password_hash(user['password_hash'], password_candidate):
-            session['user_id'] = user['id']
-            session['role'] = user['role']
+        if user and bcrypt.check_password_hash(user[3], password_candidate):
+            session['user_id'] = user['0']
+            session['role'] = user['4']
             flash('You are now logged in', 'success')
             return redirect(url_for('dashboard'))
         else:
