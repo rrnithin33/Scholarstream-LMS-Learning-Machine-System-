@@ -119,32 +119,56 @@ def logout():
 def dashboard():
     if not g.user:
         return redirect(url_for('login'))
-    
-    role = g.user['role']
-    cur = mysql.connection.cursor()
-    
+
+    role = g.user[4]
+    user_id = g.user[0]
+
+    # Admin
     if role == 'admin':
-        cur.execute("SELECT * FROM users")
-        users = cur.fetchall()
-        cur.close()
+        cursor.execute("SELECT * FROM users")
+        users = cursor.fetchall()
+
         return render_template('admin/dashboard.html', user=g.user, users=users)
+
+    # Instructor
     elif role == 'instructor':
-        cur.execute("SELECT * FROM courses WHERE instructor_id = %s", (g.user['id'],))
-        courses = cur.fetchall()
-        # Simple count for students (just sum total enrollments for their courses)
-        cur.execute("SELECT COUNT(*) as count FROM enrollments e JOIN courses c ON e.course_id = c.id WHERE c.instructor_id = %s", (g.user['id'],))
-        enroll_count = cur.fetchone()['count']
-        cur.close()
-        return render_template('instructor/dashboard.html', user=g.user, courses=courses, enroll_count=enroll_count)
+        cursor.execute("SELECT * FROM courses WHERE instructor_id=?", (user_id,))
+        courses = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT COUNT(*) FROM enrollments e
+            JOIN courses c ON e.course_id = c.id
+            WHERE c.instructor_id=?
+        """, (user_id,))
+        enroll_count = cursor.fetchone()[0]
+
+        return render_template('instructor/dashboard.html',
+                               user=g.user,
+                               courses=courses,
+                               enroll_count=enroll_count)
+
+    # Student
     else:
-        # Get courses student is enrolled in
-        cur.execute("SELECT c.*, e.enrolled_at FROM courses c JOIN enrollments e ON c.id = e.course_id WHERE e.student_id = %s", (g.user['id'],))
-        enrolled_courses = cur.fetchall()
-        # Get all other courses
-        cur.execute("SELECT * FROM courses WHERE id NOT IN (SELECT course_id FROM enrollments WHERE student_id = %s)", (g.user['id'],))
-        all_courses = cur.fetchall()
-        cur.close()
-        return render_template('student/dashboard.html', user=g.user, enrolled_courses=enrolled_courses, all_courses=all_courses)
+        cursor.execute("""
+            SELECT c.*, e.enrolled_at
+            FROM courses c
+            JOIN enrollments e ON c.id = e.course_id
+            WHERE e.student_id=?
+        """, (user_id,))
+        enrolled_courses = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT * FROM courses
+            WHERE id NOT IN (
+                SELECT course_id FROM enrollments WHERE student_id=?
+            )
+        """, (user_id,))
+        all_courses = cursor.fetchall()
+
+        return render_template('student/dashboard.html',
+                               user=g.user,
+                               enrolled_courses=enrolled_courses,
+                               all_courses=all_courses)
 
 @app.route('/course/new', methods=['GET', 'POST'])
 def new_course():
