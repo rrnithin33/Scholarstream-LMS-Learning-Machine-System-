@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
-from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
 import pymysql
@@ -14,14 +13,6 @@ app.secret_key = 'scholarstream_secret_key'
 conn = sqlite3.connect('database.db', check_same_thread=False)
 cursor = conn.cursor()
 
-# MySQL Configurations
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'ewcm'
-app.config['MYSQL_DB'] = 'scholarstream_lms'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
-
-mysql = MySQL(app)
 bcrypt = Bcrypt(app)
 
 # Ensure upload directory exists
