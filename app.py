@@ -80,10 +80,8 @@ def login():
         email = request.form['email']
         password_candidate = request.form['password']
         
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s", [email])
-        user = cur.fetchone()
-        cur.close()
+        cursor.execute("SELECT * FROM users WHERE email=?", (email,))
+        user = cursor.fetchone()3
         
         if user and bcrypt.check_password_hash(user['password_hash'], password_candidate):
             session['user_id'] = user['id']
