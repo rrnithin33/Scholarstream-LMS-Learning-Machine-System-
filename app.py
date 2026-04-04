@@ -3,11 +3,16 @@ from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import os
 import pymysql
+import sqlite3
+
 
 pymysql.install_as_MySQLdb()
 
 app = Flask(__name__)
 app.secret_key = 'scholarstream_secret_key'
+
+conn = sqlite3.connect('database.db', check_same_thread=False)
+cursor = conn.cursor()
 
 # MySQL Configurations
 app.config['MYSQL_HOST'] = 'localhost'
