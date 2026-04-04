@@ -58,21 +58,22 @@ def register():
         email = request.form['email']
         password = request.form['password']
         role = request.form['role']
-        
+
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        
-        cur = mysql.connection.cursor()
+
         try:
-            cur.execute("INSERT INTO users (username, email, password_hash, role) VALUES (%s, %s, %s, %s)", 
-                        (username, email, hashed_password, role))
-            mysql.connection.commit()
+            cursor.execute(
+                "INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)",
+                (username, email, hashed_password, role)
+            )
+            conn.commit()
+
             flash('Registration successful! Please login.', 'success')
             return redirect(url_for('login'))
+
         except Exception as e:
             flash(f'Error: {e}', 'danger')
-        finally:
-            cur.close()
-            
+
     return render_template('register.html')
 
 @app.route('/login', methods=['GET', 'POST'])
