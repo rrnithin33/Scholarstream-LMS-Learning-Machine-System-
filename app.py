@@ -81,7 +81,7 @@ def login():
         password_candidate = request.form['password']
         
         cursor.execute("SELECT * FROM users WHERE email=?", (email,))
-        user = cursor.fetchone()3
+        user = cursor.fetchone()
         
         if user and bcrypt.check_password_hash(user['password_hash'], password_candidate):
             session['user_id'] = user['id']
