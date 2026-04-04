@@ -13,6 +13,21 @@ app.secret_key = 'scholarstream_secret_key'
 conn = sqlite3.connect('database.db', check_same_thread=False)
 cursor = conn.cursor()
 
+cursor.executescript('''
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username TEXT UNIQUE NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    role TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+''')
+
+conn.commit()
+
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
