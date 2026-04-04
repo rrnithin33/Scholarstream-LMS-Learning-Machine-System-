@@ -54,13 +54,12 @@ def allowed_file(filename):
 @app.before_request
 def load_logged_in_user():
     user_id = session.get('user_id')
+
     if user_id is None:
         g.user = None
     else:
-        cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE id = %s", (user_id,))
-        g.user = cur.fetchone()
-        cur.close()
+        cursor.execute("SELECT * FROM users WHERE id=?", (user_id,))
+        g.user = cursor.fetchone()
 
 @app.route('/')
 def home():
