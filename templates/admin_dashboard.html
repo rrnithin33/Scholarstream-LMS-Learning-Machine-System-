@@ -40,24 +40,29 @@
                 <tbody>
                     {% if users %}
                         {% for user in users %}
-                        <tr style="border-bottom: 1px solid var(--border-color); transition: background 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
-                            <td style="padding: 1.25rem 2rem; font-weight: 600;">{{ user.username }}</td>
-                            <td style="padding: 1.25rem 2rem; color: var(--text-muted);">{{ user.email }}</td>
-                            <td style="padding: 1.25rem 2rem;">
-                                <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; 
-                                    {% if user.role == 'admin' %} background: #ef4444; color: white;
-                                    {% elif user.role == 'instructor' %} background: #3b82f6; color: white;
-                                    {% else %} background: #10b981; color: white; {% endif %}">
-                                    {{ user.role }}
-                                </span>
-                            </td>
-                            <td style="padding: 1.25rem 2rem; font-size: 0.85rem; color: var(--text-muted);">{{ user.created_at.strftime('%Y-%m-%d') if user.created_at else 'N/A' }}</td>
-                            <td style="padding: 1.25rem 2rem;">
-                                <div style="display:flex; gap: 0.5rem;">
-                                    <a href="{{ url_for('edit_user', user_id=user.id) }}" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; border: 1px solid var(--border-color); text-decoration: none;">Edit</a>
-                                    <button onclick="confirmDelete('{{ user.id }}', '{{ user.username }}')" class="btn" style="padding: 0.4rem 0.8rem; font-size: 0.75rem; border: 1px solid #ef4444; color: #ef4444; background: transparent;">Delete</button>
-                                </div>
-                            </td>
+                        <td>{{ user[1] }}</td>
+<td>{{ user[2] }}</td>
+
+<td>
+    <span style="padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
+    {% if user[4] == 'admin' %}
+        background: #ef4444; color: white;
+    {% elif user[4] == 'instructor' %}
+        background: #3b82f6; color: white;
+    {% else %}
+        background: #10b981; color: white;
+    {% endif %}
+    ">
+        {{ user[4] }}
+    </span>
+</td>
+
+<td>{{ user[5] if user[5] else 'N/A' }}</td>
+
+<td>
+    <a href="{{ url_for('edit_user', user_id=user[0]) }}">Edit</a>
+    <button onclick="confirmDelete({{ user[0] }}, '{{ user[1] }}')">Delete</button>
+</td>
                         </tr>
                         {% endfor %}
                     {% else %}
