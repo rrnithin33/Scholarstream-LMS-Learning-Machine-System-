@@ -128,7 +128,7 @@ def dashboard():
         cursor.execute("SELECT * FROM users")
         users = cursor.fetchall()
 
-        return render_template('admin/dashboard.html', user=g.user, users=users)
+        return render_template('dashboard.html', user=g.user, users=users)
 
     # Instructor
     elif role == 'instructor':
@@ -142,7 +142,7 @@ def dashboard():
         """, (user_id,))
         enroll_count = cursor.fetchone()[0]
 
-        return render_template('instructor/dashboard.html',
+        return render_template('dashboard.html',
                                user=g.user,
                                courses=courses,
                                enroll_count=enroll_count)
@@ -165,7 +165,7 @@ def dashboard():
         """, (user_id,))
         all_courses = cursor.fetchall()
 
-        return render_template('student/dashboard.html',
+        return render_template('dashboard.html',
                                user=g.user,
                                enrolled_courses=enrolled_courses,
                                all_courses=all_courses)
